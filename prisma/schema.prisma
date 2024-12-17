@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workshop {
+  id                       String         @id @default(uuid())
+  name                     String
+  description              String
+  imagePath                String
+  mentors                  String
+  packagePriceInRs         Int
+  pricePerClass            Int
+  ageGroup                 String
+  noOfClass                Int
+  time                     DateTime
+  weekdays                 String
+  isAvailableForEnrollment Boolean        @default(true)
+  createdAt                DateTime       @default(now())
+  updatedAt                DateTime       @updatedAt
+  participants             Participants[]
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  createdDate DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Participants {
+  id                  String   @id @default(uuid())
+  name                String
+  email               String   @unique
+  contactNumber       String
+  address             String
+  contactPersonDetail String
+  pricePaidInRs       Int
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  workShopId String
+  workshop   Workshop @relation(fields: [workShopId], references: [id], onDelete: Restrict)
+}
