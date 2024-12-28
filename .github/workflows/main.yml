@@ -1,0 +1,45 @@
+name: Deploy Next.js App
+
+on:
+  push:
+      branches:
+        - main # triggers workfow on push to the 'main' branch 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1 Checkout the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2 Setup Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 21
+        cache: npm
+
+    # Step 3 Install Dependencies
+    - name: Install Dependencies
+      run: npm install
+
+    # Step 4 Build the project
+    - name: Build Next.js App
+      run: npm run build
+
+    # Step 5 Deploy to VPS using SSH
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_PRIVATE_KEY }}
+        port: 22
+        scripts: |
+          cd /home/norbu/projects/gurukulStudio
+          git pull origin main
+          npm install
+          npm run build
+          pm2 restart nextjs-app
