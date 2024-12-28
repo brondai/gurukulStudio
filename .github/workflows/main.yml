@@ -36,7 +36,7 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_PRIVATE_KEY }}
-        port: 22
+        port: 5522
         scripts: |
           cd /home/norbu/projects/gurukulStudio
           git pull origin main
