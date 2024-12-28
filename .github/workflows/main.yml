@@ -35,9 +35,9 @@ jobs:
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_PRIVATE_KEY }}
+        key: ${{ secrets.VPS_PRIVATE_KEY }}  # Ensure this is the correct private key in GitHub Secrets
         port: 5522
-        scripts: |
+        script: |
           cd /home/norbu/projects/gurukulStudio
           git pull origin main
           npm install
