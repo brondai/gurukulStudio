@@ -32,6 +32,8 @@ jobs:
     # Debug SSH key
     - name: Debug SSH Key
       run: |
+          echo "${{ secrets.VPS_HOST }}"
+          echo "${{ secrets.VPS_USER }}"
           echo "${{ secrets.VPS_PRIVATE_KEY }}" | base64 -d
     # Test SSH Connection
     - name: Test SSH Connection
