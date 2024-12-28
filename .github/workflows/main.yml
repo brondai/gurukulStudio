@@ -39,7 +39,7 @@ jobs:
     # Test SSH Connection
     - name: Test SSH Connection
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 5522 user@your-vps-ip "echo Connected"
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 5522 norbu@43.245.85.60 "echo Connected"
 
     # Step 5 Test connextion to VPS
     - name: Test SSH connection to VPS
