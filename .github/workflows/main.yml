@@ -39,7 +39,8 @@ jobs:
     # Step 6: Test SSH Connection
     - name: Test SSH Connection
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 5522 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "echo Connected"
+        ping ${{ secrets.VPS_HOST }}
+        ping -c 4 ${{ secrets.VPS_HOST }}
 
     # Step 7: Deploy to VPS
     - name: Deploy to VPS
