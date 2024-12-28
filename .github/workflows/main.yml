@@ -2,61 +2,56 @@ name: Deploy Next.js App
 
 on:
   push:
-      branches:
-        - main # triggers workfow on push to the 'main' branch 
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1 Checkout the repository
+    # Step 1: Checkout the repository
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Step 2 Setup Node.js
+    # Step 2: Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 21
+        node-version: 20
         cache: npm
 
-    # Step 3 Install Dependencies
+    # Step 3: Install Dependencies
     - name: Install Dependencies
       run: npm install
 
-    # Step 4 Build the project
+    # Step 4: Build the Next.js App
     - name: Build Next.js App
       run: npm run build
 
-    # Debug SSH key
-    - name: Debug SSH Key
+    # Step 5: Setup SSH Key
+    - name: Setup SSH Key
       run: |
-          echo "${{ secrets.VPS_HOST }} host"
-          echo "${{ secrets.VPS_USER }} user"
-          echo "${{ secrets.VPS_PRIVATE_KEY }}" | base64 -d
-          
-    # Test SSH Connection
-   # - name: Test SSH Connection
-    #  run: |
-     #   ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 5522 norbu@43.245.85.60 "echo Connected"
+        echo "${{ secrets.VPS_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
-    # Step 5 Test connextion to VPS
-    - name: Test SSH connection to VPS
+    # Step 6: Test SSH Connection
+    - name: Test SSH Connection
       run: |
-        nc -zv 43.245.85.60 5522
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 5522 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "echo Connected"
 
-    # Step 5 Deploy to VPS using SSH
+    # Step 7: Deploy to VPS
     - name: Deploy to VPS
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_PRIVATE_KEY }}  # Ensure this is the correct private key in GitHub Secrets
+        key: ${{ secrets.VPS_PRIVATE_KEY }}
         port: 5522
         script: |
           cd /home/norbu/projects/gurukulStudio
+          git reset --hard
           git pull origin main
-          npm install
+          npm ci
           npm run build
           pm2 restart nextjs-app
