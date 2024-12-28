@@ -28,6 +28,10 @@ jobs:
     # Step 4 Build the project
     - name: Build Next.js App
       run: npm run build
+# Step 5 Test connextion to VPS
+    - name: Test SSH connection to VPS
+      run: |
+        nc -zv ${{ secrets.VPS_HOST }} 22
 
     # Step 5 Deploy to VPS using SSH
     - name: Deploy to VPS
