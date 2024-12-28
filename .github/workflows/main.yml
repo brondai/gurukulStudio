@@ -39,7 +39,7 @@ jobs:
     # Step 6: Test SSH Connection
     - name: Test SSH Connection
       run: |
-        ping ${{ secrets.VPS_HOST }}
+        ping -c 4 43.245.85.60
         ping -c 4 ${{ secrets.VPS_HOST }}
 
     # Step 7: Deploy to VPS
