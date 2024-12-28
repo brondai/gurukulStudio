@@ -9,7 +9,6 @@ const title = Margarine({
 });
 
 export default function Home() {
-  console.log(title);
   return (
     <>
       <section className="container mx-auto min-h-screen px-4 flex flex-col justify-center">
@@ -216,12 +215,8 @@ export default function Home() {
               />
             </div>
           </div>
-
-          
         </div>
       </section>
-
-      
     </>
   );
 }
