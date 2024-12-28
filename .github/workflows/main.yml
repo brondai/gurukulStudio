@@ -32,6 +32,7 @@ jobs:
     # Step 5: Setup SSH Key
     - name: Setup SSH Key
       run: |
+        mkdir -p ~/.ssh
         echo "${{ secrets.VPS_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
 
