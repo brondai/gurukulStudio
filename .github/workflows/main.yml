@@ -7,53 +7,70 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout Code
       uses: actions/checkout@v3
-
-    # Step 2: Set up Node.js
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
-        cache: npm
-
-    # Step 3: Install Dependencies
     - name: Install Dependencies
       run: npm install
+    - name: Build and Deploy
+      run: |
+        cd /home/norbu/projects/gurukulStudio
+        git pull origin main
+        npm install
+        npm run build
+        pm2 restart nextjs-app
+
+
+#jobs:
+ # build-and-deploy:
+ #   runs-on: ubuntu-latest
+
+  #  steps:
+    # Step 1: Checkout the repository
+   # - name: Checkout Code
+    #  uses: actions/checkout@v3
+
+    # Step 2: Set up Node.js
+    #- name: Set up Node.js
+     # uses: actions/setup-node@v3
+      #with:
+       # node-version: 20
+        #cache: npm
+
+    # Step 3: Install Dependencies
+    #- name: Install Dependencies
+     # run: npm install
 
     # Step 4: Build the Next.js App
-    - name: Build Next.js App
-      run: npm run build
+    #- name: Build Next.js App
+     # run: npm run build
 
     # Step 5: Setup SSH Key
-    - name: Setup SSH Key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.VPS_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+    # - name: Setup SSH Key
+    #   run: |
+    #     mkdir -p ~/.ssh
+    #     echo "${{ secrets.VPS_PRIVATE_KEY }}" | base64 -d > ~/.ssh/id_rsa
+    #     chmod 600 ~/.ssh/id_rsa
 
-    # Step 6: Test SSH Connection
-    - name: Test SSH Connection
-      run: |
-        ping -c 4 43.245.85.60
-        ping -c 4 ${{ secrets.VPS_HOST }}
+    # # Step 6: Test SSH Connection
+    # - name: Test SSH Connection
+    #   run: |
+    #     ping -c 4 43.245.85.60
+    #     ping -c 4 ${{ secrets.VPS_HOST }}
 
-    # Step 7: Deploy to VPS
-    - name: Deploy to VPS
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_PRIVATE_KEY }}
-        port: 5522
-        script: |
-          cd /home/norbu/projects/gurukulStudio
-          git reset --hard
-          git pull origin main
-          npm ci
-          npm run build
-          pm2 restart nextjs-app
+    # # Step 7: Deploy to VPS
+    # - name: Deploy to VPS
+    #   uses: appleboy/ssh-action@v0.1.7
+    #   with:
+    #     host: ${{ secrets.VPS_HOST }}
+    #     username: ${{ secrets.VPS_USER }}
+    #     key: ${{ secrets.VPS_PRIVATE_KEY }}
+    #     port: 5522
+    #     script: |
+    #       cd /home/norbu/projects/gurukulStudio
+    #       git reset --hard
+    #       git pull origin main
+    #       npm ci
+    #       npm run build
+    #       pm2 restart nextjs-app
