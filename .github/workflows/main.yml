@@ -9,17 +9,27 @@ jobs:
   build-and-deploy:
     runs-on: self-hosted
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
-    - name: Install Dependencies
-      run: npm install
-    - name: Build and Deploy
-      run: |
-        cd /home/norbu/projects/gurukulStudio
-        git pull origin main
-        npm install
-        npm run build
-        pm2 restart gurukul
+      # Step 1: Check out the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Install Dependencies
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      # Step 3: Build the Next.js Application
+      - name: Build Application
+        run: |
+          npm run build
+
+      # Step 4: Deploy and Restart PM2
+      - name: Deploy and Restart Application
+        run: |
+          rsync -avz --delete ./ /home/norbu/projects/gurukulStudio/
+          cd /home/norbu/projects/gurukulStudio
+          pm2 restart gurukul
+
 
 
 #jobs:
