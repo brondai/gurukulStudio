@@ -1,4 +1,4 @@
-
+"use client";
 
 import { ComponentProps, ReactNode } from "react";
 import Link from "next/link";

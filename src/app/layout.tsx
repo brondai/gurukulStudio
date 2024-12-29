@@ -38,12 +38,8 @@ export default function RootLayout({
             height={50}
             priority
           />
-         
         </header>
-        <main>
-
-        {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );
