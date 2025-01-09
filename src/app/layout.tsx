@@ -1,7 +1,7 @@
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Image from "next/image";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,19 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <header className="p-4 fixed top-0">
-          <Image
-            className="dark:invert"
-            src="/logo.jpeg"
-            alt="Gurukul Studio logo"
-            width={50}
-            height={50}
-            priority
-          />
-        </header>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >        
         <main>{children}</main>
       </body>
     </html>
